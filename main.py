@@ -11,6 +11,7 @@ import requests
 import sqlite3
 import time
 import re
+import logging
 from menu_roles import SelectView
 from help_menu import HelpButton
 from ctime_menu import CtimeButton
