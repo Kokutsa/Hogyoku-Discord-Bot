@@ -11,7 +11,7 @@ import requests
 import sqlite3
 import time
 import re
-import logging
+from geopy.geocoders import Nominatim
 from menu_roles import SelectView
 from help_menu import HelpButton
 from ctime_menu import CtimeButton
@@ -41,13 +41,6 @@ bot.attendance_data = []
 
 # Set the number of fields to display per page
 fields_per_page = 10
-
-# Rate limiting interval (in seconds)
-rate_limit_interval = 2
-
-# Set up logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger('discord')
 
 
 # Function to create the 'attendance_data' table if it doesn't exist
@@ -415,31 +408,6 @@ async def on_message(message):
   if message.author.bot:
     return
   
-  if guild:
-    bleach_booster_role = discord.utils.get(author.roles,
-                                            id=bleach_booster_role_id)
-
-    if bleach_booster_role is None:
-      roles_to_remove = [
-          guild.get_role(role_id) for role_id in booster_role_ids_to_remove
-      ]
-      removed_role_names = [role.name for role in roles_to_remove]
-
-      # Remove the specified roles with rate limiting
-      for role in roles_to_remove:
-        try:
-          await author.remove_roles(role)
-          await asyncio.sleep(rate_limit_interval)
-          logger.info(f'Removed role "{role.name}" from {author.name}')
-        except discord.Forbidden:
-          logger.warning(
-              f'Failed to remove role "{role.name}" from {author.name} (Insufficient Permissions)'
-          )
-        except discord.HTTPException as e:
-          logger.error(
-              f'An error occurred while removing role "{role.name}" from {author.name}: {e}'
-          )
-
   if not message.author.bot:
     author_id = message.author.id
     connection = sqlite3.connect('afk_statuses.db')
@@ -496,38 +464,6 @@ async def ping(interaction: discord.Interaction):
   latency = round(bot.latency * 1000)  # Convert to milliseconds
   await interaction.response.send_message(f"Pong! Bot latency is {latency}ms.",
                                           ephemeral=False)
-
-
-@bot.event
-async def on_member_update(before, after):
-  # Check if the user no longer has the bleach booster role
-  guild = bot.get_guild(bleach_guild_id)
-
-  if guild:
-    bleach_booster_role = discord.utils.get(after.roles,
-                                            id=bleach_booster_role_id)
-    if bleach_booster_role is None:
-      member = after
-      roles_to_remove = [
-          guild.get_role(role_id) for role_id in booster_role_ids_to_remove
-      ]
-
-      # Remove the specified roles with rate limiting
-      for role in roles_to_remove:
-        try:
-          await member.remove_roles(role)
-          await asyncio.sleep(rate_limit_interval)
-          logger.info(
-              f'Removed role "{role.name}" from {member.name} due to removal of bleach booster role'
-          )
-        except discord.Forbidden:
-          logger.warning(
-              f'Failed to remove role "{role.name}" from {member.name} (Insufficient Permissions)'
-          )
-        except discord.HTTPException as e:
-          logger.error(
-              f'An error occurred while removing role "{role.name}" from {member.name}: {e}'
-          )
 
 
 # Implement the reaction event for pagination
