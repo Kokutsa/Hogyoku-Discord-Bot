@@ -10,9 +10,6 @@ YOUR_BOT_TOKEN = os.environ.get('token')
 # Your default status
 default_status = discord.Status.idle
 
-# Replace 'YOUR_WEBHOOK_URL_HERE' with your actual webhook URL
-webhook_rules_url = os.environ.get('webhook_url')
-
 # Beginner roles for BLEACH guild
 bleach_beginner_roles = [
     1144194274607497237, 1143252276325138562, 1144194627801452604
