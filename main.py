@@ -17,7 +17,7 @@ from help_menu import HelpButton
 from ctime_menu import CtimeButton
 import bleach_wallpapers
 import bleach_quotes
-from config import prefix, default_status, YOUR_BOT_TOKEN, bleach_guild_name, bleach_guild_id, owner_role_name, owner_role_id, commander_role_name, commander_role_id, oken_role_name, oken_role_id, mod_role_name, mod_role_id, staff_role_name, staff_role_id, mute_role_name, mute_role_id, lvl10_role_name, lvl10_role_id, bleach_booster_role_name, bleach_booster_role_id, active_mod_role_name, active_mod_role_id, inactive_mod_role_name, inactive_mod_role_id, five_stars_role_name, five_stars_role_id, log_channel_name, log_channel_id
+from config import prefix, default_status, YOUR_BOT_TOKEN, booster_role_ids_to_remove, bleach_guild_name, bleach_guild_id, owner_role_name, owner_role_id, commander_role_name, commander_role_id, oken_role_name, oken_role_id, mod_role_name, mod_role_id, staff_role_name, staff_role_id, mute_role_name, mute_role_id, lvl10_role_name, lvl10_role_id, bleach_booster_role_name, bleach_booster_role_id, active_mod_role_name, active_mod_role_id, inactive_mod_role_name, inactive_mod_role_id, five_stars_role_name, five_stars_role_id, log_channel_name, log_channel_id
 from keep_alive import keep_alive
 
 keep_alive()
