@@ -396,53 +396,51 @@ async def on_message(message):
         return
 
     if not message.author.bot:
-        author_id = message.author.id
-        connection = sqlite3.connect('afk_statuses.db')
-        cursor = connection.cursor()
-        cursor.execute(
-            'SELECT message, afk_timestamp FROM AFKStatuses WHERE user_id = ?',
-            (author_id, ))
-        row = cursor.fetchone()
+      author_id = message.author.id
+      connection = sqlite3.connect('afk_statuses.db')
+      cursor = connection.cursor()
+      cursor.execute(
+          'SELECT message, afk_timestamp FROM AFKStatuses WHERE user_id = ?',
+          (author_id, ))
+      row = cursor.fetchone()
 
-        if row:
-            afk_message, afk_timestamp = row
-            if afk_timestamp:
-                afk_timestamp_str = f" - <t:{int(afk_timestamp)}:R>"
-            else:
-                afk_timestamp_str = ""
-            afk_notification = await message.channel.send(
-                f"{message.author.display_name} is no longer AFK: {
-                    afk_message}{afk_timestamp_str}"
-            )
+      if row:
+          afk_message, afk_timestamp = row
+          if afk_timestamp:
+              afk_timestamp_str = f" - <t:{int(afk_timestamp)}:R>"
+          else:
+              afk_timestamp_str = ""
+          afk_notification = await message.channel.send(
+              f"{message.author.display_name} is no longer AFK: {afk_message}{afk_timestamp_str}"
+          )
 
-            cursor.execute('DELETE FROM AFKStatuses WHERE user_id = ?',
-                           (author_id, ))
-            connection.commit()
-            connection.close()
+          cursor.execute('DELETE FROM AFKStatuses WHERE user_id = ?',
+                         (author_id, ))
+          connection.commit()
+          connection.close()
 
-            await asyncio.sleep(15)
-            await afk_notification.delete()
+          await asyncio.sleep(15)
+          await afk_notification.delete()
 
-        mentioned_users = message.mentions
-        for user in mentioned_users:
-            connection = sqlite3.connect('afk_statuses.db')
-            cursor = connection.cursor()
-            cursor.execute(
-                'SELECT message, afk_timestamp FROM AFKStatuses WHERE user_id = ?',
-                (user.id, ))
-            row = cursor.fetchone()
-            connection.close()
+      mentioned_users = message.mentions
+      for user in mentioned_users:
+          connection = sqlite3.connect('afk_statuses.db')
+          cursor = connection.cursor()
+          cursor.execute(
+              'SELECT message, afk_timestamp FROM AFKStatuses WHERE user_id = ?',
+              (user.id, ))
+          row = cursor.fetchone()
+          connection.close()
 
-            if row:
-                afk_message, afk_timestamp = row
-                if afk_timestamp:
-                    afk_timestamp_str = f" - <t:{int(afk_timestamp)}:R>"
-                else:
-                    afk_timestamp_str = ""
-                await message.channel.send(
-                    f"{user.display_name} is currently AFK: {
-                        afk_message}{afk_timestamp_str}"
-                )
+          if row:
+              afk_message, afk_timestamp = row
+              if afk_timestamp:
+                  afk_timestamp_str = f" - <t:{int(afk_timestamp)}:R>"
+              else:
+                  afk_timestamp_str = ""
+              await message.channel.send(
+                  f"{user.display_name} is currently AFK: {afk_message}{afk_timestamp_str}"
+              )
 
     await bot.process_commands(message)
 
@@ -623,8 +621,7 @@ async def attendanceremove(ctx, target: discord.Member):
     conn.close()
 
     await ctx.send(
-        f"✅ Removed {
-            target.display_name} ({target.id}) from the attendance records."
+        f"✅ Removed {target.display_name} ({target.id}) from the attendance records."
     )
 
 
@@ -810,8 +807,7 @@ async def warn(ctx, user: discord.Member, *, reason):
         )
         await user.ban(reason=f"Reached 10 warnings: {reason}")
         await user.send(
-            f"You have been permanently banned due to reaching 10 warnings: {
-                reason}"
+            f"You have been permanently banned due to reaching 10 warnings: {reason}"
         )
     elif total_warnings == 5:
         mute_role = ctx.guild.get_role(mute_role_id)
@@ -820,8 +816,7 @@ async def warn(ctx, user: discord.Member, *, reason):
             f"{user.mention} has received their 5th warning and is now muted for 1 hour."
         )
         await user.send(
-            f"You have been warned and muted for 1 hour due to reaching 5 warnings: {
-                reason}."
+            f"You have been warned and muted for 1 hour due to reaching 5 warnings: {reason}."
         )
 
         unban_time = time.time() + 3600
@@ -832,16 +827,14 @@ async def warn(ctx, user: discord.Member, *, reason):
         asyncio.create_task(temp_unban(user.id, unban_time))
     else:
         await ctx.send(
-            f"{user.mention} has been warned for: {
-                reason} and is now muted for 1 hour."
+            f"{user.mention} has been warned for: {reason} and is now muted for 1 hour."
         )
         mute_role = ctx.guild.get_role(mute_role_id)
         await user.add_roles(mute_role)
 
     log_channel = bot.get_channel(log_channel_id)
     await log_channel.send(
-        f"{user.mention} has been warned for: {
-            reason} (Total Warnings: {total_warnings})"
+        f"{user.mention} has been warned for: {reason} (Total Warnings: {total_warnings})"
     )
 
 
@@ -906,20 +899,17 @@ async def removewarn(ctx, user: discord.Member, warning_num: int, *, reason):
     db_conn.commit()
 
     await ctx.send(
-        f"Warning number {warning_num} has been removed for {
-            user.mention}: {warning_to_remove}."
+        f"Warning number {warning_num} has been removed for {user.mention}: {warning_to_remove}."
     )
 
     log_channel = bot.get_channel(log_channel_id)
     await log_channel.send(
-        f"Warning number {warning_num} has been removed for {
-            user.mention}: {warning_to_remove}. Reason: {reason}"
+        f"Warning number {warning_num} has been removed for {user.mention}: {warning_to_remove}. Reason: {reason}"
     )
 
     user_dm = await user.create_dm()
     await user_dm.send(
-        f"Your warning number {warning_num} has been removed by {
-            ctx.author.mention}. Reason: {reason}"
+        f"Your warning number {warning_num} has been removed by {ctx.author.mention}. Reason: {reason}"
     )
 
 
@@ -969,8 +959,7 @@ async def unafk(ctx, member: discord.Member):
         connection.close()
 
         await ctx.send(
-            f"{member.mention}'s AFK status has been cleared by {
-                ctx.author.mention}."
+            f"{member.mention}'s AFK status has been cleared by {ctx.author.mention}."
         )
     else:
         await ctx.send(
@@ -1044,13 +1033,11 @@ async def esnipe(ctx):
         author = edited_message['author']
         content_before_edit = edited_message['content_before_edit']
         content_after_edit = edited_message['content_after_edit']
-        jump_link = f"[Jump to Message](https://discord.com/channels/{ctx.guild.id}/{
-            ctx.channel.id}/{edited_message['id']})"
+        jump_link = f"[Jump to Message](https://discord.com/channels/{ctx.guild.id}/{ctx.channel.id}/{edited_message['id']})"
 
         embed = discord.Embed(
             title=f'Message Edited by {author.display_name}',
-            description=f'Before Edit: {content_before_edit}\nAfter Edit: {
-                content_after_edit}\n\n{jump_link}',
+            description=f'Before Edit: {content_before_edit}\nAfter Edit: {content_after_edit}\n\n{jump_link}',
             color=discord.Color.gold())
 
         # Check if the command was a reply
@@ -1147,8 +1134,7 @@ async def get(ctx, option: str, user: discord.Member = None):
 async def get_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
         await ctx.send(
-            f"This command is on cooldown. Please try again in {
-                error.retry_after:.2f} seconds."
+            f"This command is on cooldown. Please try again in {error.retry_after:.2f} seconds."
         )
     elif isinstance(error, commands.BadArgument):
         await ctx.send(
@@ -1201,8 +1187,7 @@ async def status(ctx, status_type):
         await ctx.send(f"Default status set to {status_type.capitalize()} ✅")
     else:
         await ctx.send(
-            f"You don't have permission to use this command, {
-                ctx.author.mention}."
+            f"You don't have permission to use this command, {ctx.author.mention}."
         )
 
 
