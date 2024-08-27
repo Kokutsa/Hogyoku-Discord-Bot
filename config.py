@@ -40,8 +40,8 @@ owner_role_id = 679951055722643459
 commander_role_name = "⎧ 👑 ⎫The Commanders"
 commander_role_id = 777664276558774275
 
-oken_role_name = "The Ōken"
-oken_role_id = 1144094763923021870
+oken_role_name = "Soul King's Right Hand"
+oken_role_id = 1180144923660517536
 
 mod_role_name = "⎧♠️⎫ Gotei 13"
 mod_role_id = 1143257541292339200
@@ -67,9 +67,21 @@ inactive_mod_role_id = 1176234092325503048
 five_stars_role_name = "⭐️⭐️⭐️⭐️⭐️"
 five_stars_role_id = 1176218504240824360
 
+human_role_name = "Human"
+human_role_id = 1143252276325138562
+
+hollow_role_name = "⎧💀⎫ Hollow"
+hollow_role_id = 1176205337393627277
+
+vollstandig_role_name = "⎧⛩️⎫ Vollständig"
+vollstandig_role_id = 1176206170290131014
+
 # Define channels name and ID
 log_channel_name = "⇨⛔logs"
 log_channel_id = 719749459894075412
 
 attendance_channel_name = "⇨🤓attendance"
 attendance_channel_id = 1154288576071213077
+
+report_channel_name = "⇨🗳reports"
+report_channel_id = 729453947173077032
